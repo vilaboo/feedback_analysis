@@ -1,3 +1,4 @@
+openpyxl
 langchain
 sentence_transformers==2.2.2
 google.generativeai
