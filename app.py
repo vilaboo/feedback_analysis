@@ -38,7 +38,7 @@ def analyze_sentiment(feedback, explanation):
 
     try:
         # Call Gemini Pro model to analyze the sentiment
-        response = llm.generate_text(question)  # Replace with the correct method
+        response = llm.generate_content(question)  # Replace with the correct method
         result = response.text.strip()
         return result
 
@@ -54,7 +54,7 @@ def action(feedback):
 
     try:
         # Call Gemini Pro model to generate the next best actions
-        response = llm.generate_text(prompt)  # Replace with the correct method
+        response = llm.generate_content(prompt)  # Replace with the correct method
         result = response.text.strip()
         actions = result.split('Next Actions:')[-1]
         actions = actions.strip()
@@ -71,7 +71,7 @@ uploaded_file = st.file_uploader("Choose an excel file", type='xlsx')
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
     if set(['DateTime', 'UserID', 'Feedback']).issubset(df.columns):
-        df['Sentiment'] = df['Feedback'].apply(lambda x: analyze_sentiment(x, True))
+        df['Sentiment'] = df['Feedback'].apply(lambda x: analyze_sentiment(x, explanation=False))
         df['Next Actions'] = df['Feedback'].apply(action)
         st.write(df)
         st.markdown(f'<a href="data:application/octet-stream;base64,{df.to_csv(index=False).encode().to_base64()}" download="output.csv">Download output CSV</a>', unsafe_allow_html=True)
